@@ -2,8 +2,8 @@
 slides and resources for CSC544 @ URI (Theory of Computation)
 
 <a href="lecture-notes/01-introduction.pdf">Introduction</a><br>
-<a href="lecture-notes/02-regular-languages-FA.pdf">Regular Languages - Finite Automata</a><br>
-<a href="lecture-notes/03-regular-languages-NFA.pdf">Regular Languages - NFA & Pumping Lemma</a><br>
+<a href="lecture-notes/02-regular-languages-FA.pdf">Regular Languages I, Finite Automata</a><br>
+<a href="lecture-notes/03-regular-languages-NFA.pdf">Regular Languages II, NFA & Pumping Lemma</a><br>
 <a href="lecture-notes/04-generators-recognizers.pdf">Generators & Recognizers</a><br>
 <a href="lecture-notes/05-context-free-languages.pdf">Context-Free Languages</a> (<a href="cfl-pumping.pdf">CFL pumping lemma illustr.</a>)<br>
 <a href="lecture-notes/06-turing-machines.pdf">Turing Machines I</a><br>
