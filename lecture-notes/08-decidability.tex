@@ -1,0 +1,381 @@
+%template1.tex
+%The following LaTeX source file represents the simplest kind of slide presentation; no overlays, no included graphics. Substitute your favorite style for ``pascal''. To create the PDF file template1.pdf, (1) be sure to use the prosper class, then (2) execute the command latex template1.tex, and (3) the command dvipdf template1.dvi.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,blends,pdf,colorBG,slideColor]{prosper}
+\include{defs}
+\begin{document}
+
+\bs{Proofs using Deciders}
+
+{\bf Proposition:} Let $L_1$ and $L_2$ be decidable languages, then the concatenation
+$L = L_1 \circ L_2$ is also decidable.
+
+{\bf Proof:} We show decidability of $L$ by constructing a decider for it.
+Let $M_1$ and $M_2$ be deciders for $L_1$ and $L_2$, respectively, then
+we can construct a decider $M$ for $L$ as follows:
+
+\machine{
+M = "On input $w$,
+\begin{enumerate}
+\item For each way to split $w$ into two parts, $w = w_1 w_2$, do:
+\item \mytab Run $M_1$ on $w_1$.
+\item \mytab Run $M_2$ on $w_2$.
+\item If for any combination $M_1$ and $M_2$ accept, \accept; otherwise, \reject."
+\end{enumerate}
+}
+\es
+
+\bs{Decidability}
+Let us study some "standard" machines that are deciders.  
+
+It turns out that these standard machines help us construct more complicated proofs.
+\es
+
+\bs{Decidability}
+{\small
+\fframe{
+{\bf Theorem:} The language \[A_{\mbox{\tiny DFA}} = \{ \encode{B,w} | \mbox{$B$ is a DFA
+that accepts string $w$}\}\] is decidable.
+}
+
+{\bf Proof:} We construct a decider $M_{\mbox{\tiny DFA}}$ for  $A_{\mbox{\tiny DFA}}$.
+
+\machine{
+$M_{\mbox{\tiny DFA}}$ = "On input \encode{B,w}, where $B$ is a DFA and $w$ is a string:
+\begin{enumerate}
+\item Simulate $B$ on input $w$.
+\item If the simulation ends in an accept state of the DFA, \accept; otherwise, \reject."
+\end{enumerate}
+}
+}
+\es
+
+\bs{Decidability}
+{\small
+\fframe{
+{\bf Theorem:} The language \[A_{\mbox{\tiny NFA}} = \{ \encode{B,w} | \mbox{$B$ is an NFA
+that accepts string $w$}\}\] is decidable.
+}
+
+{\bf Proof:} We construct a decider $M_{\mbox{\tiny NFA}}$ for  $A_{\mbox{\tiny NFA}}$.
+
+\machine{
+$M_{\mbox{\tiny NFA}}$ = "On input \encode{B,w}, where $B$ is an NFA and $w$ is a string:
+\begin{enumerate}
+\item Convert NFA $B$ into an equivalent DFA $B'$ (this is algorithmic, so a TM can do it).
+\item Run $M_{\mbox{\tiny DFA}}$ on input \encode{B',w}.
+\item If $M_{\mbox{\tiny DFA}}$ accepts, \accept; otherwise, \reject."
+\end{enumerate}
+}
+}
+\es
+
+\bs{Decidability}
+{\small
+\fframe{
+{\bf Theorem:} The language \[A_{\mbox{\tiny REX}} = \{ \encode{R,w} | \mbox{$R$ is a regular expression that generates
+string $w$}\}\] is decidable.
+}
+
+{\bf Proof:} We construct a decider $M_{\mbox{\tiny REX}}$ for  $A_{\mbox{\tiny REX}}$.
+
+\machine{
+$M_{\mbox{\tiny REX}}$ = "On input \encode{R,w}, where $R$ is a regular expression and $w$ is a string:
+\begin{enumerate}
+\item Convert regular expression $R$ into an equivalent DFA $R'$ (this is algorithmic, so a TM can do it).
+\item Run $M_{\mbox{\tiny DFA}}$ on input \encode{R',w}.
+\item If $M_{\mbox{\tiny DFA}}$ accepts, \accept; otherwise, \reject."
+\end{enumerate}
+}
+}
+\es
+
+
+\bs{Decidability}
+{\small
+\fframe{
+{\bf Theorem:} The language \[E_{\mbox{\tiny DFA}} = \{ \encode{A} | \mbox{$A$ is a DFA and $L(A) = \emptyset$}\}\] is decidable.
+}
+
+{\bf Proof:} We construct a decider $M_{E_{\mbox{\tiny DFA}}}$ for  $E_{\mbox{\tiny DFA}}$.
+
+\machine{
+$M_{E_{\mbox{\tiny DFA}}}$ = "On input \encode{A}, where $A$ is a DFA:
+\begin{enumerate}
+\item Mark the start state of $A$.
+\item Repeat until no new states get marked:
+\item \mytab Mark any state that has a transition coming into it from  any state
+already marked.
+\item If no accept state is marked, \accept; otherwise, \reject."
+\end{enumerate}
+}
+}
+\es
+
+\bs{Decidability}
+{\small
+\fframe{
+{\bf Theorem:} The language \[EQ_{\mbox{\tiny DFA}} = \{ \encode{A,B} | \mbox{$A$ and $B$ are DFAs and $L(A) = L(B)$}\}\] is decidable.
+}
+
+{\bf Proof:}  In order to show this we construct a new machine $C$ that accepts only
+those string that either $A$ or $B$ accepts but not both, i.e.
+\begin{equation}
+\label{eq:symmetric-diff}
+L(C) = (L(A) \cap \overline{L(B)}) \cup (\overline{L(A)} \cap L(B)).
+\end{equation}
+Furthermore, we require that $L(C) = \emptyset$ which implies that $L(A) = L(B)$ as
+needed.
+
+Regular languages are closed under complementation, union, and intersection; therefore
+we are able to construct machine $C$ according to (\ref{eq:symmetric-diff}).
+
+We can now construct a decider $M_{EQ_{\mbox{\tiny DFA}}}$ for  $EQ_{\mbox{\tiny DFA}}$.
+
+\machine{
+$M_{EQ_{\mbox{\tiny DFA}}}$ = "On input \encode{A,B}, where $A$ $B$ are DFAs:
+\begin{enumerate}
+\item Construct DFA $C$ as described in (\ref{eq:symmetric-diff}).
+\item Run $M_{E_{\mbox{\tiny DFA}}}$ on input \encode{C}.
+\item If $M_{E_{\mbox{\tiny DFA}}}$ accepts, \accept; otherwise, \reject."
+\end{enumerate}
+}
+}
+\es
+
+
+
+\bs{Decidability}
+{\small
+\fframe{
+{\bf Theorem:} The language \[A_{\mbox{\tiny CFG}} = \{ \encode{G,w} | \mbox{$G$ is a CFG that generates
+string $w$}\}\] is decidable.
+}
+
+{\bf Proof Attempt 1:} We construct a decider $M_{\mbox{\tiny CFG}}$ for  $A_{\mbox{\tiny CFG}}$.
+
+\machine{
+$M_{\mbox{\tiny CFG}}$ = "On input \encode{G,w}, where $G$ is a CFG and $w$ is a string:
+\begin{enumerate}
+\item Convert CFG $G$ into an equivalent PDA $G'$ (this is algorithmic, so a TM can do it).
+\item Simulate $G'$ on input $w$.
+\item If the simulation ends in an accept state, \accept; otherwise, \reject."
+\end{enumerate}
+}
+
+$\Rightarrow$ Turns out that this does {\bf\em not} work because a PDA is a non-deterministic machine
+and can have branches could go on computing forever.
+
+{\bf NOTE:} in practice we actually do use PDAs to decide membership, since infinite
+computations are not a problem since we always "guess" just the appropriate transitions
+using dynamic programming techniques and when we cannot guess the appropriate transition that usually signals an error.
+}
+\es
+
+\bs{Decidability}
+{\small
+\fframe{
+{\bf Theorem:} The language \[A_{\mbox{\tiny CFG}} = \{ \encode{G,w} | \mbox{$G$ is a CFG that generates
+string $w$}\}\] is decidable.
+}
+
+{\bf Proof Attempt 2:} We construct a decider $M_{\mbox{\tiny CFG}}$ for  $A_{\mbox{\tiny CFG}}$.
+
+\machine{
+$M_{\mbox{\tiny CFG}}$ = "On input \encode{G,w}, where $G$ is a CFG and $w$ is a string:
+\begin{enumerate}
+\item Convert CFG $G$ into an equivalent Chomsky normal form $G'$ (this is algorithmic, so a TM can do it).
+\item List all derivations with $2n - 1$ steps, where $n$ is the length of $w$,
+except if $n = 0$, then list all derivations with 1 step.
+\item If any of these derivations generate $w$, \accept; otherwise, \reject."
+\end{enumerate}
+}
+
+{\bf NOTE:} now the computation is bounded by $2n-1$ $\rightarrow$ decider.
+}
+\es
+
+
+\bs{Decidability}
+{\small
+\fframe{
+{\bf Theorem:} The language \[E_{\mbox{\tiny CFG}} = \{ \encode{G} | \mbox{$G$ is a CFG and $L(G) = \emptyset$}\}\] is decidable.
+}
+
+{\bf Proof:} We construct a decider $M_{E_{\mbox{\tiny CFG}}}$ for  $E_{\mbox{\tiny CFG}}$.
+
+\machine{
+$M_{E_{\mbox{\tiny CFG}}}$ = "On input \encode{G}, where $G$ is a CFG:
+\begin{enumerate}
+\item Mark all terminal symbols in $G$.
+\item Repeat until no new variables get marked:
+\item \mytab Mark any variable $A$ where $G$ has a rule $A \rightarrow U_1 U_2\ldots U_k$ and each symbol $U_1 U_2\ldots U_k$ has already been marked.
+\item If the start symbol is not marked, \accept; otherwise, \reject."$\Box$
+\end{enumerate}
+}
+}
+
+{\tiny
+{\bf Example:}
+\begin{eqnarray*}
+S &\rightarrow& ASA\\
+S &\rightarrow& a B\\
+A &\rightarrow& B\\
+A & \rightarrow & S\\
+B & \rightarrow& b\\
+B &\rightarrow& \epsilon
+\end{eqnarray*}
+}
+\es
+
+
+\bs{Decidability}
+{\small
+\fframe{
+{\bf Theorem:} Every context-free language is decidable.
+}
+
+{\bf Proof:} Let $A$ be a CFL, then we know that there must be a CFG $G$ such that
+$L(G) = A$.  Now we can construct a decider $M_A$ for $A$ as follows:
+
+\machine{
+$M_A$ = "On input $w$, where $w$ is some string:
+\begin{enumerate}
+\item Run $M_{\mbox{\tiny CFG}}$ on \encode{G,w}.
+\item If $M_{\mbox{\tiny CFG}}$ accepts, \accept; otherwise, \reject."
+\end{enumerate}
+}
+}
+\es
+
+\bs{Example}
+
+{\bf Example:} Let \[A = \{ \encode{M} | \mbox{$M$ is a DFA which does not accept any
+string containing an odd number of $1$'s}\}.\]
+Show that $A$ is decidable.
+
+{\bf Proof:} We need to construct a decider $M$ for $A$.
+
+\machine{
+$M$ = "On input \encode{M}, where $M$ is a  DFA:
+\begin{enumerate}
+\item Construct a DFA $O$ that accepts every string containing an odd number of $1$'s.
+\item Construct a DFA $B$ such that $L(B) = L(M) \cap L(O)$.
+\item Run $M_{E_{\mbox{\tiny DFA}}}$ on input \encode{B}.
+\item If $M_{E_{\mbox{\tiny DFA}}}$ accepts, \accept; otherwise, \reject."
+\end{enumerate}
+}
+\es
+
+
+\bs{The Halting Problem}
+{\small
+\fframe{{\bf Theorem:} The language
+\[
+A_{TM} = \{ \encode{M,w} | \mbox{$M$ is a TM and $M$ accepts $w$.}\}
+\]
+is undecidable.
+}
+{\bf Proof:} By contradiction.  Assume that there exists a decider $H$ for language $A_{TM}$. Then,
+\[
+H(\encode{M,w}) = \left \{
+\begin{array}{ll}
+\mbox{\accept} & \mbox{if $M$ accepts $w$}\\
+\mbox{\reject} & \mbox{if $M$ does not accept $w$}
+\end{array}
+\right .
+\]
+We construct a new TM $D$ such that
+\begin{quote}
+$D$ = "On input $\encode{Q}$ where $Q$ is a TM:
+\begin{enumerate}
+\item Run $H$ on input $\encode{Q, \encode{Q}}$.
+\item Output the opposite of what $H$ outputs; that is, if $H$ accepts, {\em reject}
+and if 
+$H$ rejects, \accept."
+\end{enumerate}
+\end{quote}
+Now,
+\[
+D(\encode{M}) = \left \{
+\begin{array}{ll}
+\mbox{\accept} & \mbox{if $M$ does not accept $\encode{M}$}\\
+\mbox{\reject} & \mbox{if $M$ accepts $\encode{M}$}
+\end{array}
+\right .
+\]
+But...
+}
+\es
+
+\bs{The Halting Problem}
+{\small
+Now consider,
+\[
+D({\color{red}\encode{D}}) = \left \{
+\begin{array}{ll}
+\mbox{\accept} & \mbox{if $D$ does not accept $\encode{D}$}\\
+\mbox{\reject} & \mbox{if $D$ accepts $\encode{D}$}
+\end{array}
+\right .
+\]
+This is a contradiction.  Therefore, neither $H$ nor $D$ can exist and $A_{TM}$ is
+undecidable.$\Box$
+}
+\es
+
+\bs{$A_{TM}$ is Turing-Recognizable}
+\fframe{{\bf Theorem:} The language
+\[
+A_{TM} = \{ \encode{M,w} | \mbox{$M$ is a TM and $M$ accepts $w$.}\}
+\]
+is Turing-Recognizable.
+}
+{\bf Proof:} We construct the TM $U$ that recognizes $A_{TM}$,
+\begin{quote}
+$U$ = "On input $\encode{M,w}$ where $M$ is a TM and $w$ is a string:
+\begin{enumerate}
+\item Simulate $M$ on string $w$.
+\item If $M$ ever enters its accept state, \accept; if $M$ ever enters its reject state, \reject."
+\end{enumerate}
+\end{quote}
+\es
+
+
+\bs{\large Non-Turing-Recognizable Languages}
+The undecidability  of $A_{TM}$ has profound ramifications $\Rightarrow$ the existence of languages that are non-algorithmic, that is, languages that are not Turing-recognizable.
+
+
+One such language is the complement of $A_{TM}$.
+\es
+
+\bs{\Large Non-Turing-Recognizable Languages}
+\fframe{{\bf Theorem:} The language $\overline{A_{TM}}$ is not Turing-recognizable.}
+
+{\bf Proof:} By contradiction. Observe that $A_{TM}$ is undecidable.  In addition, observe
+that $A_{TM}$ is Turing-recognizable.  Now, assume that $\overline{A_{TM}}$ is also
+Turing-recognizable.  Observing that a string $w$ is either an element of $A_{TM}$
+or an element of $\overline{A_{TM}}$ we can construct the following decider for
+$A_{TM}$.
+Let $M_1$ and $M_2$ be recognizers for $A_{TM}$ and $\overline{A_{TM}}$, respectively:
+
+\begin{quote}
+$M$ = "On input $w$, where $w$ is a string:
+\begin{enumerate}
+\item Run $M_1$ and $M_2$ in parallel on $w$.
+\item If $M_1$ accepts, \accept; if $M_2$ accepts, \reject."
+\end{enumerate}
+\end{quote}
+
+Note that this machine is a decider because it will halt on every input $w$.  
+Also note, that this decider contradicts our theorem that $A_{TM}$ is 
+undecidable.  Therefore, our assumption that $\overline{A_{TM}}$
+is Turing-recognizable must be wrong.
+
+This shows that $\overline{A_{TM}}$ is not Turing-recognizable.$\Box$
+\es
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% end of template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

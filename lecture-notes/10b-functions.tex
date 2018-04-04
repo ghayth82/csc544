@@ -1,0 +1,153 @@
+%template1.tex
+%The following LaTeX source file represents the simplest kind of slide presentation; no overlays, no included graphics. Substitute your favorite style for ``pascal''. To create the PDF file template1.pdf, (1) be sure to use the prosper class, then (2) execute the command latex template1.tex, and (3) the command dvipdf template1.dvi.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,blends,pdf,colorBG,slideColor]{prosper}
+\include{defs}
+\begin{document}
+
+\bs{The Mathematics of Functions}
+The $\lambda$-calculus is very low level.  Here we investigate functions in a more abstract (mathematical) setting.
+
+This is very similar to writing algorithms in English prose rather than writing actual machine code for the 
+Turing machines.
+\es
+
+\bs{The Mathematics of Functions}
+\small
+Function Application and Composition:
+
+Let $f\co A \rightarrow B$ be a (total) function from $A$ to $B$, then
+for every value $x\in A$ we obtain a value $y\in B$,
+\[
+f x = y
+\]
+Function application is expressed by the {\em juxtaposition} of the function and its argument and
+is evaluated from right to left.
+
+Now assume that we have another function $g\co B \rightarrow C$ from $B$ into $C$, then
+we can apply the function $g$ to the result of $f$.  For every value in $x\in A$
+we obtain a value $z\in C$,
+\[
+g f x = g y = z
+\]
+In other words, we just constructed a new function, call it $h\co A \rightarrow C$, such that
+\[
+h x = g f x = g y = z
+\]
+We can express the same idea using function composition, $\circ$, without having to 
+explicitly reference any values in $A$, $B$, or $C$,
+\[
+h = g \circ f
+\]
+and we say that ``$h$ is the composition of the function $g$ with function $f$''.
+
+Note, that function composition is computed from right to left.
+
+\es
+
+\bs{The Mathematics of Functions}
+\small
+The Tuple:
+
+Given two elements $x\in A$ and $y\in B$, then the tuple constructs an element of the
+cross-product $A\times B$,
+\[
+x\in A, y\in B \Rightarrow (x,y)\in A\times B
+\]
+
+This is an important construction because it lets us apply functions to pairs (tuples) of values.
+Assume we have a function $f\co A\times B \rightarrow C$.  This function
+can only be applied to values in the cross-product $A\times B$, but we know how to construct
+these values -- yes, the tuple,
+\[
+f {\color{red}(x,y)} = z
+\]
+for $x\in A$, $y\in B$, and $z\in C$.
+
+Notice that we consider the tuple and function application separate computational steps.
+
+We can of course generalize this to arbitrarily complex tuples, let $x_1\in X_1,\ldots,x_n\in X_n$
+and let $f\co X_1\times\ldots\times X_n \rightarrow Y$, then
+\[
+f {\color{red}(x_1,\ldots,x_n)} = y
+\]
+for $y\in Y$.
+\es
+
+
+\bs{The Mathematics of Functions}
+\small
+Tuples of Functions:
+
+Something interesting happens when we construct tuples of functions, let $f\co A \rightarrow B$
+and let $g\co A \rightarrow B$, then
+\[
+(f,g) \in (A\rightarrow B)\times (A\rightarrow B)
+\]
+The pair of functions acts in parallel on an input in $A$ and produces a pair of output values in $B\times B$.
+
+Let $a\in A$ and $b_f, b_g\in B$, then
+\[
+(f,g) a = (f a, g a) = (b_f, b_g)
+\]
+with $f a = b_f$ and $g a= b_g$.
+
+Something a little bit more complicated.  Let $f\co X\times Y \rightarrow Z$ and $g\co X\times Y \rightarrow Z$ with $x\in X, y\in Y$ and $z_1, z_2\in Z$,
+\[
+(f,g)(x,y) = \left (f (x,y), g (x,y)\right) = \left (z_1, z_2\right )
+\]
+where $f (x,y) = z_1$ and $g (x,y) = z_2$.
+\es
+
+\bs{The Mathematics of Functions}
+\small
+Projection Functions:
+
+Given a tuple
+\[
+(x_1,\ldots,x_n)
+\]
+with $x_1\in X_1,\ldots,x_n\in X_n$, then we can project the $i^{\mbox{\rm th}}$ component of the 
+tuple with the projection function $p^{(n)}_i\co X_1\times\ldots\times X_n \rightarrow X_i$,
+\[
+p^{(n)}_i {\color{red}(x_1,\ldots,x_n)} = x_i
+\]
+with $1 \le i \le n$.
+
+A more concrete example, let $x\in A$ and $y\in B$, then
+\begin{align*}
+p^{(2)}_1 (x,y) &= x\\
+p^{(2)}_2 (x,y) &= y\\
+\end{align*}
+but
+\begin{align*}
+p^{({\color{red}3})}_1 (x,y) &= ???\\
+p^{(2)}_{\color{red}5} (x,y) &= ???\\
+\end{align*}
+\es
+
+\bs{The Mathematics of Functions}
+\small
+Putting Projection Functions, Tuples, and Composition together:
+
+Let $f\co X_1\times X_2 \rightarrow Y$ and let $(x_1,x_2,x_3)\in X_1\times X_2\times X_3$, then
+\[
+f \circ (p_1^{(3)},p_2^{(3)}) \co X_1\times X_2 \times X_3 \rightarrow Y
+\]
+Applying this function to our tuple we have
+\[
+f (p_1^{(3)},p_2^{(3)})(x_1,x_2,x_3) = f (p_1^{(3)}(x_1,x_2,x_3),p_2^{(3)}(x_1,x_2,x_3)) = f (x_1,x_2)
+\]
+
+Here is another example, let $(x_1,x_2)\in X_1\times X_2$, then
+\[
+(p_1^{(2)},p_2^{(2)}) (x_1,x_2) = (p_1^{(2)}(x_1,x_2),p_2^{(2)}(x_1,x_2)) = (x_1,x_2)
+\]
+\es
+
+
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% end of template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

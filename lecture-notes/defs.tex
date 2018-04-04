@@ -1,0 +1,91 @@
+% definitions for slides for CSC544
+% Lutz Hamel, (c) 2007
+
+\hypersetup{pdfpagemode=FullScreen}
+
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{amsmath}
+%\usepackage[usenames]{color}
+\usepackage{xypic}
+
+
+\newcommand{\term}[1]{\ensuremath{\mbox{\bf #1}}}
+\newcommand{\nonterm}[1]{\ensuremath{\mbox{#1}}}
+\newcommand{\ifstmt}[3]{\ensuremath{{\bf if}\; {#1}\;{\bf then}\;{#2}\;{\bf else}\;{#3}\;\term{end}}}
+\newcommand{\whilestmt}[2]{\ensuremath{{\bf while}\; {#1}\;{\bf do}\;{#2}\; \term{end}}}
+\newcommand{\funcstmt}[3]{\ensuremath{{\bf fun}\; {#1}\; {\bf is}\; {#2} \; {\bf return}\; {#3}}}
+\newcommand{\syntaxset}[1]{\ensuremath{\mbox{\bf #1}}}
+\newcommand{\orbar}{\;|\;}
+\newcommand{\bs}[1]{\begin{slide}{#1}\ptsize{8}}
+\newcommand{\es}{\end{slide}}
+\newcommand{\co}{\,\colon\;}
+\newcommand{\pair}[2]{\ensuremath{\langle {#1}, {#2} \rangle}}
+\newcommand{\encode}[1]{\ensuremath{\langle {#1} \rangle}}
+\newcommand{\mytab}{\makebox[.15in]{}}
+%\newcommand{\abs}[1]{{\mid{#1}\mid}}
+\newcommand{\abs}[1]{{|{#1}|}}
+\newcommand{\ol}[1]{\overline{#1}}
+
+\newcommand{\qaccept}{\ensuremath{q_{\mbox{\tiny accept}}}}
+\newcommand{\qreject}{\ensuremath{q_{\mbox{\tiny reject}}}}
+\newcommand{\accept}{{\em accept}}
+\newcommand{\reject}{{\em reject}}
+
+\newcommand{\machine}[1]{
+	\begin{quote}
+	{#1}
+	\end{quote}
+	}
+
+\newcommand{\fdef}[1]{
+	\begin{center}
+	\fbox{
+	\begin{minipage}{3.5in}
+	{\bf Definition:}
+	{#1}
+	\end{minipage}
+	}
+	\end{center}
+	}
+
+\newcommand{\ftheorem}[1]{
+	\begin{center}
+	\fbox{
+	\begin{minipage}{3.5in}
+	{\bf Theorem:}
+	{#1}
+	\end{minipage}
+	}
+	\end{center}
+	}
+
+\newcommand{\flemma}[1]{
+	\begin{center}
+	\fbox{
+	\begin{minipage}{3.5in}
+	{\bf Lemma:}
+	{#1}
+	\end{minipage}
+	}
+	\end{center}
+	}
+
+
+\newcommand{\fframe}[1]{
+	\begin{center}
+	\fbox{
+	\begin{minipage}{3.5in}
+	{#1}
+	\end{minipage}
+	}
+	\end{center}
+	}
+
+\newcommand{\nframe}[1]{
+	\begin{center}
+	\begin{minipage}{3.5in}
+	{#1}
+	\end{minipage}
+	\end{center}
+	}

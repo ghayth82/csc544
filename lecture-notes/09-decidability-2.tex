@@ -1,0 +1,237 @@
+%template1.tex
+%The following LaTeX source file represents the simplest kind of slide presentation; no overlays, no included graphics. Substitute your favorite style for ``pascal''. To create the PDF file template1.pdf, (1) be sure to use the prosper class, then (2) execute the command latex template1.tex, and (3) the command dvipdf template1.dvi.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,blends,pdf,colorBG,slideColor]{prosper}
+\include{defs}
+\begin{document}
+
+\bs{Another Proof}
+
+We just saw a  proof that languages that are not Turing-recognizable exist based on
+the fact that a decider for $A_{TM}$ cannot exist
+
+Let's look at another proof that shows that some languages are not algorithmic.
+
+The proof proceeds by showing that the set of all Turing machines is countably infinite whereas the set of all languages is uncountable.  Therefore, there exist some languages
+that are not recognized by a Turing machine.
+
+{\bf NOTE:} Let $\aleph_0$ be the cardinality of the natural numbers and $C$ the cardinality of the reals, then Cantor's continuum hypothesis states that $\aleph_0 < C$.
+That is, the natural numbers are {\em countably infinite} whereas the reals are {\em uncountable}.\footnote{The book has the classical proof of the uncountability of the reals based on diagonalization.}
+
+\begin{center}
+\em ``There are fewer natural numbers than there are reals.''
+\end{center}
+\vspace{.5in}
+\es
+
+\bs{Countable Sets}
+
+Here are some simple examples of countable sets:
+
+
+
+{\scriptsize
+\begin{minipage}[t]{1in}
+\[
+\begin{array}{l | l}
+n & f(n) \\ \hline
+1 & 1\\
+2 & 2 \\
+\vdots & \vdots\\
+k & k
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{1in}
+\[
+\begin{array}{l | l}
+n & f(n) \\ \hline
+1 & 10\\
+2 & 20 \\
+\vdots & \vdots\\
+k & k*10
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{1in}
+\[
+\begin{array}{l | l}
+n & f(n) \\ \hline
+1 & 2\\
+2 & 4 \\
+\vdots & \vdots\\
+k & k*2
+\end{array}
+\]
+\end{minipage}
+\begin{minipage}[t]{1in}
+\[
+\begin{array}{l | l}
+n & f(n) \\ \hline
+1 & 1\\
+2 & 3 \\
+\vdots & \vdots\\
+k & k*2 - 1
+\end{array}
+\]
+\end{minipage}
+}
+
+
+
+{\bf Observation:} In all cases the mapping $f$ between $n$ and $f(n)$ is one-to-one
+and onto, that is, it is bijective: Each value of $n$ uniquely identifies a value of $f(n)$ and there is no way to construct a member of the codomain
+of $f$ that does not already appear in the correspondence.
+
+{\bf Observation:}  If we choose $k=\infty$ then we call the set $f(n)$ countably infinite.
+\es
+
+\bs{The Reals are Uncountable}
+{\small
+\fframe{\begin{center}{\bf Proposition:} The set of all reals is uncountable.\end{center}}
+}
+{\scriptsize
+{\bf Proof:} By contradiction.  Assume that the
+set of all reals is countable.  Let $f: {\mathbb N} \rightarrow {\mathbb R}$ be a bijective mapping
+from the naturals to the set of all reals.  Only consider the reals in the interval $[0,1]$. Then by assumption we have,
+\begin{center}
+{\tiny
+\begin{minipage}[t]{1in}
+$
+\begin{array}{l | l}
+n & f(n) \\ \hline
+1 & 0.{\color{red}3}156978\ldots\\
+2 & 0.6{\color{red}5}39879\ldots \\
+3 & 0.11{\color{red}3}4768\ldots\\
+\vdots & \vdots\\
+k & 0.2200354653\ldots{\color{red}5}\ldots\\
+\vdots & \vdots\\
+\end{array}
+$
+\end{minipage}
+}
+\end{center}
+
+That is, since $f$ is a bijective mapping we have a list of all possible real values.
+We now show that we can construct a real value that is not included
+in the list above.  We construct this value
+by taking the $i$th digit after the decimal point for each
+real value identified by $i$ appearing in the correspondence and adding one to it (modulo 10).  We use these
+newly generated digits to construct a new value in $[0,1]$: $0.464\ldots6\ldots$
+
+By construction this value differs from any real value appearing in the codomain of
+the mapping by at least  one digit.  This means that there is at least
+one value in the codomain of $f$ which is not in the image of $f$.  This is a contradiction,
+since $f$ was assumed to be a bijective mapping.  Therefore, our assumption
+that the set of all reals is countable must be wrong. $\Box$
+}
+\es
+
+\bs{Diagonalization}
+The general proof technique is as follows:
+\begin{enumerate}
+\item Assume that you have a correspondence $f\co {\mathbb N} \rightarrow {\cal S}$,
+where ${\cal S}$ is the structure you want to investigate.
+\item Construct a grid with the rows containing elements of your correspondence.
+\item Now construct a new item of your structure as an element of $\cal S$
+such that it will differ from all other elements in the correspondence on the
+major diagonal.
+\item This is a contradiction since you have constructed an element in $\cal S$ not listed in the
+correspondence, therefore, $f$ is not a correspondence and the structure $\cal S$
+is not countable.
+\end{enumerate}
+\es
+
+\bs{Turing Machines are Countably Infinite}
+\fframe{
+{\bf Theorem:} The set of all Turing machines is countably infinite.
+}
+
+{\bf Proof:}  Let $\Sigma_{0,1} = \{ 0,1\}$ be the alphabet over the symbols $0$ and $1$, observe that the
+set of all strings over this alphabet, say $\Sigma_{0,1}^*$, is countably infinite by the fact that
+we can interpret each string in this set as the binary encoding of a natural number.
+Now, let $\encode{M}_{0,1}$ be the binary encoding of some Turing machine $M$.  
+It is clear that such an encoding exists, since any other encoding $\encode{M}_{\Sigma'}$
+can be transformed into the encoding $\encode{M}_{0,1}$ by representing each
+symbol in $\Sigma'$ as a unique string in $\Sigma_{0,1}$.\footnote{We do this everyday on our digital computers.}
+Now, let $\encode{M}_{0,1}^*$ be the set of all encoded, valid Turing machine descriptions.
+Observe that  $\encode{M}_{0,1}^*\subseteq \Sigma_{0,1}^*$.
+This implies that the set of all Turing machines is countable infinite.$\Box$
+
+\vspace{.5in}
+\es
+
+
+\bs{\large Infinite Binary Sequences are Uncountable}
+{\small
+\fframe{{\bf Theorem:} The set of all infinite binary sequences is uncountable.}
+}
+{\scriptsize
+{\bf Proof:} We prove this by contradiction using the diagonalization method.  Assume that we can construct
+a bijective mapping $f\co {\mathbb N} \rightarrow {\cal B}$, where $\mathbb N$ are the natural
+numbers and $\cal B$ is the set of all infinite binary sequences.  Then,
+
+{\tiny
+\begin{center}
+\begin{tabular}{r | l}
+$n$ & $f(n)$ \\ \hline
+$1$ & ${\color{red}0}100111\ldots$\\
+$2$ & $1{\color{red}1}111000\ldots$\\
+$3$ & $10{\color{red}1}1001\ldots$\\
+$\vdots$ & $\vdots$\\
+$k$ & $0010\ldots{\color{red}0}_k\ldots$\\
+$\vdots$ & $\vdots$\\
+\end{tabular}
+\end{center}
+}
+Observe that we can always construct another binary sequence which will differ 
+from all the enumerated sequences by at least one bit,
+\[
+{\color{red} 100}\ldots{\color{red}1_k}\ldots
+\]
+That is, for any value $i$ we have constructed a sequence which will differ in 
+value from $f(i)$ in the $i^{\mbox{th}}$ bit.  Therefore, there exist
+elements in $\cal B$ that are not in the image of $f$.  That means
+our assumption that $f$ is bijective is incorrect. $\Box$
+}
+\es
+
+\bs{Languages are Uncountable}
+{\small
+\fframe{{\bf Theorem:} The set of all languages $L$ over alphabet $\Sigma_{0,1}$
+is uncountable.}
+
+{\bf Proof:} We show this by constructing a bijective mapping $f\co L \rightarrow {\cal B}$.
+For each language $A \in L$ we can construct a unique element in ${\cal B}$ called
+the {\em characteristic sequence}.  Let $\Sigma_{0,1}^* = \{ s_1, s_2,s_3,\ldots\}$, then
+the $i$th bit of the characteristic sequence of $A$ is $1$ if $s_i \in A$ and $0$ if
+$s_i \not\in A$. Note,
+\begin{itemize}
+\item The empty language has the characteristic sequence $000000\ldots$
+\item The language $\Sigma_{0,1}^*$ has the characteristic sequence $1111\ldots$
+\end{itemize}
+The mapping $f$ is bijective in that any possible language in $L$ has a unique sequence
+in $\cal B$ and any sequence in $\cal B$ uniquely defines a language in $L$.
+$\Box$
+}
+\es
+
+\bs{\large Not Turing-recognizable Languages}
+
+\fframe{{\bf Theorem:} Some languages are not Turing-recognizable.}
+
+{\bf Proof:} Observe that $\#\encode{M}_{0,1}^* \le \aleph_0$ and
+$ \aleph_0 < \# L$.  It follows from previous proofs that there are some languages
+that are not recognized by a Turing machine. 
+$\Box$
+
+\vspace{.5in}
+
+\begin{center}
+\em ``There are more languages than there are Turing Machines.''
+\end{center}
+\es
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% end of template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

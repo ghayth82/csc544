@@ -1,0 +1,54 @@
+%template1.tex
+%The following LaTeX source file represents the simplest kind of slide presentation; no overlays, no included graphics. Substitute your favorite style for ``pascal''. To create the PDF file template1.pdf, (1) be sure to use the prosper class, then (2) execute the command latex template1.tex, and (3) the command dvipdf template1.dvi.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,blends,pdf,colorBG,slideColor]{prosper}
+\include{defs}
+\begin{document}
+
+\bs{$PSPACE$}
+\fdef{{\bf $PSPACE$} is the class of languages that are decidable in polynomial space on a deterministic Turing machine.  Formally,
+\[
+PSPACE = \bigcup_k SPACE(n^k), \mbox{ with $k > 0$}.
+\]
+}
+
+We define $NPSPACE = \bigcup_k NSPACE(n^k)$, for $k > 0$.  But from Savitch's theorem it follows that
+{\small
+\[
+NPSPACE = \bigcup_k NSPACE(n^k) = \bigcup_k SPACE(n^{k+2}) = \bigcup_k SPACE(n^k) = PSPACE.
+\]
+}
+\es
+
+
+\bs{A Hierarchy of Complexity}
+
+We can now construct a hierarchy of complexity classes.
+
+Observe that $P \subseteq PSPACE$.  To see this let a machine execute in $t(n) \ge n$ polynomial time.  But this implies that the machine can use at most $t(n)$ polynomial space (one cell per computation step).
+
+In a similar argument we have $NP \subseteq NPSPACE$ and from the argument above $NP \subseteq PSPACE$.
+
+We already know that $P \subseteq NP$.
+
+Finally, if we have a $f(n) \ge n$ polynomial space machine it can be shown that this machine runs in
+$2^{O(f(n))}$ exponential time.  Thus, $PSPACE \subseteq EXPTIME$.
+
+\[
+P \subseteq NP \subseteq PSPACE \subseteq EXPTIME.\footnote{It is believed that all the set containments are proper.}
+\]
+
+\vspace{.2in}
+\es
+
+
+\bs{A Hierarchy of Complexity}
+\begin{center}
+\includegraphics[height=60mm]{images/complexity-hierarchy.eps}
+\end{center}
+\es
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% end of template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

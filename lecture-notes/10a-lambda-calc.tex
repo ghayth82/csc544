@@ -1,0 +1,249 @@
+%template1.tex
+%The following LaTeX source file represents the simplest kind of slide presentation; no overlays, no included graphics. Substitute your favorite style for ``pascal''. To create the PDF file template1.pdf, (1) be sure to use the prosper class, then (2) execute the command latex template1.tex, and (3) the command dvipdf template1.dvi.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,blends,pdf,colorBG,slideColor]{prosper}
+\include{defs}
+\begin{document}
+\bs{\large The Other Model: $\lambda$ Calculus}
+So far we have only looked at Turing machines as our model.  
+
+{\bf Question:} Where does the Church in the Church-Turing thesis  come from?
+
+{\bf Answer:} Alonzo Church invented the $\lambda$ calculus to model computing with functions.
+
+Turns out the $\lambda$ calculus is as powerful as the Turing machine, we are just not used to thinking
+in terms of universal computing using just functions.
+\es
+
+\bs{\large The Other Model: $\lambda$ Calculus}
+The next couple of lectures will show that the $\lambda$ calculus and the Turing machine are equivalent in terms
+of computational power.
+\begin{enumerate}
+\item Introduce the $\lambda$ calculus.
+\item Introduce the primitive- and $\mu$-recursive functions.
+\item \label{calc} Show that the $\lambda$ calculus implements the $\mu$-recursive functions.
+\item Show that a Turing machine implements the $\mu$-recursive functions.
+\item \label{TL}Show that a Turing machine implements the $\lambda$-calculus.
+\item Show that $\mu$-recursive functions can implement Turing machines.
+\item \label{LT}Because of \ref{calc} we can conclude that $\lambda$ calculus can implement Turing machines.
+\item From \ref{TL} and \ref{LT} we conclude that the $\lambda$-calculus and Turing machines are computationally equivalent. 
+\end{enumerate}
+
+One way to look at the $\lambda$ calculus is as a term rewriting system.
+\es
+
+\bs{$\lambda$ Calculus 101}
+
+$\lambda$-calculus aims to model computation with functions.  At the
+core of this calculus are $\lambda$-expressions of the form
+\[
+\lambda x.\,E
+\]
+denoting functions with a parameter $x$ and a function body $E$.  Here is the variable $x$ is assumed to be
+{\em free} in $E$ (i.e. the variable is assumed not bound by a $\lambda$-operator).
+
+The syntax for the calculus can be summarized by the following context-free grammar,
+\begin{eqnarray*}
+\mbox{<function>} &::=& \lambda \mbox{<var>}.\,\mbox{<expression>}\\
+\mbox{<expression>} &::=& \mbox{<var>} \mid \mbox{<function>} \mid \mbox{<application>}\\
+\mbox{<application>} &::=& \mbox{<expression>}\mbox{<expression>}
+\end{eqnarray*}
+{\bf Example:}
+\[
+(\lambda x.\, x)(\lambda f.\, (\lambda y.\, f \, y))
+\]
+
+\es
+
+\bs{$\lambda$ Calculus 101}
+
+{\bf Rules:} The calculus is very simple, it essentially consists of only three rules:
+$\alpha$-conversion, $\beta$-reduction, and $\eta$-conversion.
+
+{\bf Notation:}  Let $E$ and $E'$ be $\lambda$-expression and $v$ a variable, then $E[E'/v]$
+denotes the expression resulting from substituting $E'$ for all occurrences  of the variable $v$ in expression $E$.
+
+{\bf Extensions:} We allow for a number of extensions in our calculus all of which can be implemented in
+classical $\lambda$-calculus but make the calculus easier to use:
+\begin{itemize}
+\item naming of functions 
+\item pattern matching on structures
+\item constants
+\end{itemize}
+\es
+
+
+\bs{$\lambda$ Calculus 101}
+
+{\small
+
+{\bf $\alpha$-conversion:} This rule states that we are allowed  to rename variables without changing
+the meaning of a function.  Formally,
+\[
+\lambda v.\,E = \lambda w.\,E[w/v],
+\]
+as long as $w$ does not appear freely in $E$ and $w$ is not bound by a $\lambda$ in $E$ whenever it replaces a $v$.
+Here $v$ and $w$ are variables and $E$ is a $\lambda$-expression.
+
+This gives rise to the following equivalences:
+\[
+\begin{array}{l}
+\lambda x.\, x = \lambda y.\, y\\
+\lambda x.\,(\lambda x.\, x)x = \lambda y.\,(\lambda x.\, x)y
+\end{array}
+\]
+but note that
+\[
+\lambda x.\,\lambda y.\,x \ne \lambda y.\,\lambda y.\,y    \hspace{.5in}\mbox{(Why?)}
+\]
+}
+\es
+
+\bs{$\lambda$ Calculus 101}
+
+
+{\bf $\beta$-reduction:} This rule expresses the idea of function application. Formally,
+\[
+(\lambda v. \, E)E' = E[E'/v],
+\]
+where $v$ is a variable, $E$ and $E'$ are $\lambda$-expressions.
+
+{\bf Example:}
+\[
+(\lambda n \in {\mathbb{N}}.\, n + 1)1 = 1 + 1 = 2
+\]
+
+
+{\bf Note:} When no more $\beta$-reductions are possible on a terms then we say that we have reached
+a {\em normal form}.
+\es
+
+\bs{$\lambda$ Calculus 101}
+
+\small
+{\bf $\eta$-conversion:}  This rule expresses the idea of extensionality, which in this context is that two functions are the same if and only if they give the same result for all arguments. Let $M$ be a lambda expression then the $\eta$-conversion converts between  $M$ and $\lambda x.\,M x$    whenever $x$ does not appear free in $M$.
+
+\vspace{.1in}
+
+{\bf Example:} Let $M$ be the lambda expression $\lambda n.\,n+1$, then applying the $\eta$-conversion we have $\lambda x.\,(\lambda n.\, n+1)\, x$.
+
+\vspace{.1in}
+
+We can formally show that $\lambda n.\,n+1$ and $\lambda x.\,(\lambda n.\, n+1)\, x$ are equivalent expressions:
+\[
+\begin{array}{rclr}
+\lambda x.\,(\lambda n.\, n+1)\, x &=& \lambda x.\,x+1 & \mbox{($\beta$-reduction)}\\
+	&=& \lambda n.\,n+1 &  \mbox{($\alpha$-conversion)}
+\end{array}
+\]
+
+\es
+
+\bs{$\lambda$ Calculus 101}
+
+{\scriptsize
+The $\beta$-reduction rule is perhaps obvious, since it actually allows us to compute the value of
+a function application, but what about the $\alpha$-conversion?
+The rule states that renaming unbound variables does not change the nature of the function.  Why is this useful?  Consider the function $\lambda n \in {\mathbb{N}}.\, n + 1$ which is the successor function.  Let's use this function to construct the function $\lambda n \in {\mathbb{N}}.\, n +2$,
+\[
+\lambda n \in {\mathbb{N}}.\, (\lambda n \in {\mathbb{N}}.\, n + 1)n + 1
+\]
+Pretty confusing...let's use the $\alpha$-conversion rule to rename the $\lambda$-bound variable of the inner
+successor function,
+\[
+\lambda n \in {\mathbb{N}}.\, (\lambda k \in {\mathbb{N}}.\, k + 1)n + 1
+\]
+More readable because the scoping of the $\lambda$-bound variables is now  explicit.
+}
+\es
+
+\bs{$\lambda$ Calculus 101}
+\scriptsize
+Examples:  Compute the normal forms of the following $\lambda$-expressions:
+\begin{enumerate}
+\item $(\lambda x.\, x)\, 2$
+\item $(\lambda x.\, (x, x))\, 2$
+\item $(\lambda (x, y).\, (x, y, z))\, (5, 3)$
+\item $(\lambda (x, y).\, y)\, (5, 3)$
+\item $(\lambda x.\, (y, w))\, 2$
+\item $(\lambda x.\, x)\, (\lambda x.\, x)$
+\item $(\lambda x.\, (x\, x))\, (\lambda x.\,(x\, x))$
+\item We let sequences of values be represented by $a::b::c::[]$, for example the string `fun' would be the
+sequence of symbols $f::u::n::[]$, then what is the result of the following computation,
+\[
+(\lambda x::q.\, q) (f::u::n::[])
+\]
+\item We call the expression $c ?\, x : y$ a conditional expression which returns $x$ if $c$ evaluates to true and
+it returns $y$ if $c$ evaluates to false.  Given this, what does the following expression evaluate to:
+\footnote{The notation $(\lambda x y z.\, E)$ is a short hand for the function $(\lambda x.\, \lambda y.\, \lambda z.\, E)$.}
+\[
+(\lambda x y z.\, x > 0 ?\, y : z)\, 3\,  (\lambda q.\, q - 1)\, (\lambda p.\, p + 1)\, 1
+\]
+\end{enumerate}
+\es
+
+\bs{$\lambda$-calc computability}
+\scriptsize
+{\bf Example:} We show that the $\lambda$-calculus can generate a Turing recognizable language that is not context-free,
+\[
+L = \{ a^nb^n(ab)^n \mid n \ge 0\}
+\]
+We do this in two stages, first we build a function that given an index will generate the corresponding string and then
+we build an iterator that uses the generator to generate all the strings in the language (theoretically at least, it would loop 
+forever).
+\begin{eqnarray*}
+\mbox{GEN} &=& \lambda n.\, \mbox{APPEND}\, (\mbox{APPEND}\, (\mbox{ASTRING}\, n)\, (\mbox{BSTRING}\, n))\,(\mbox{ABSTRING}\, n)\\
+\mbox{APPEND} &=& \lambda x y.\, (x = []) ?\, y : (\mbox{HD} \, x):: (\mbox{APPEND}\, (\mbox{TL}\, x)\, y)\\
+\mbox{HD} &=& \lambda x::y.\, x\\
+\mbox{TL} &=& \lambda x::y.\, y\\
+\mbox{ASTRING} &=& \lambda n.\, (n=0)?\, [] : (a :: (\mbox{ASTRING}\, (n - 1))\\
+\mbox{BSTRING} &=& \lambda n.\, (n=0)?\, [] : (b :: (\mbox{BSTRING}\, (n - 1))\\
+\mbox{ABSTRING} &=& \lambda n.\, (n=0)?\, [] : (a :: b :: (\mbox{ABSTRING}\, (n - 1))\\
+&&\\
+\mbox{ITER} &=& \lambda x.\, (\mbox{STEP}\, 0\, [])\\
+\mbox{STEP} &=& \lambda n k.\, (\mbox{STEP}\, (n + 1) \, ((\mbox{GEN}\, n)::k))
+\end{eqnarray*}
+\es
+
+
+\bs{$\lambda$-calc computability}
+{\bf Notes:}
+\begin{itemize}
+\item Convince yourself that you understand what the $\lambda$-expression GEN does.  What does the expression
+return for an input of $0$? 1? 2?
+\item What does the output of the $\lambda$-expression ITER look like?
+\item A set of strings generated by a {\em recursive} $\lambda$-expression  is called
+{\em recursively enumerable language}.  Furthermore, the set of all recursively enumerable languages is
+exactly the same set as the Turing-recognizable languages.\footnote{\tiny We will see that is true later
+when we show that the $lambda$-calculus and the Turing machine are computationally equivalent.}
+\end{itemize}
+\es
+
+
+\bs{$\lambda$-calc computability}
+{\bf Example:} To highlight the fact that we can construct algorithms at par with the Turing machine in the $\lambda$-calculus, let's us build a recognizer for the Turing-recongizable language
+\[
+L =\{ a^na^na^n \mid n \ge 0\}
+\]
+We will make use of the fact that for any string $s \in L$ we have\footnote{\tiny Easily shown to be true by induction
+on $n$.}
+\[
+a^na^na^n = a^{3n}
+\]
+for any $n \ge 0$.  
+We construct the $\lambda$-expression $R$ that will recognize this language,
+{\scriptsize
+\begin{eqnarray*}
+\mbox{R} &=& \lambda x.\, (\mbox{CHECKA}\, x) \wedge (\mbox{DIV3}\, x)\\
+\mbox{CHECKA} &=& \lambda x.\, x = []?\, \mbox{TRUE} : ((\mbox HD \, x) \ne a ? \, \mbox{FALSE} : (\mbox{CHECKA}\, (\mbox{TL}\, x)))\\  
+\mbox{DIV3} &=&  \lambda x.\, x = []?\, \mbox{TRUE} : ((\mbox{LENGTH}\, x) < 3 ?\, \mbox{FALSE}  : (\mbox{DIV3}\, (\mbox{TL}\, (\mbox{TL}\, (\mbox{TL}\, x)))))\\  
+\mbox{LENGTH} &=& \lambda x.\, x = [] ? \, 0 : 1 + (\mbox{LENGTH}\, (\mbox{TL}\, x))\\
+\mbox{HD} &=& \lambda x::y.\, x\\
+\mbox{TL} &=& \lambda x::y.\, y\\
+\end{eqnarray*}
+}
+\es
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% end of template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

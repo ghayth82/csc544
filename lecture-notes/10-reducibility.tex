@@ -1,0 +1,259 @@
+%template1.tex
+%The following LaTeX source file represents the simplest kind of slide presentation; no overlays, no included graphics. Substitute your favorite style for ``pascal''. To create the PDF file template1.pdf, (1) be sure to use the prosper class, then (2) execute the command latex template1.tex, and (3) the command dvipdf template1.dvi.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,blends,pdf,colorBG,slideColor]{prosper}
+\include{defs}
+\begin{document}
+
+\bs{Reducibility}
+We say that a problem $Q$ reduces to problem $P$ if we can use $P$ to solve $Q$.
+
+In the context of decidability we have the following ``templates'':
+
+\fframe{
+\begin{equation}
+\label{reduce-1}
+\mbox{If $A$ reduces to $B$ and $B$ is decidable, then so is $A$.}
+\end{equation}
+}
+and
+\fframe{
+\begin{equation}
+\label{reduce-2}
+\mbox{If $A$ reduces to $B$ and $A$ is undecidable, then so is $B$.}
+\end{equation}
+}
+
+The template (\ref{reduce-1}) allows us to set up proofs by contradiction to
+prove undecidability.
+\es
+
+\bs{$A_{TM}$}
+Recall the $A_{TM}$ language:
+
+{\small
+\fframe{{\bf Theorem:} The language
+\[
+A_{TM} = \{ \encode{M,w} | \mbox{$M$ is a TM and $M$ accepts $w$.}\}
+\]
+is undecidable.
+}
+}
+\es
+
+\bs{Reducibility}
+{\small
+\fframe{{\bf Theorem:} The language
+\[
+HALT_{TM} = \{ \encode{M,w} | \mbox{$M$ is a TM and $M$ halts on input $w$}\}
+\]
+is undecidable.
+}
+{\bf Proof:} Proof by contradiction.  We assume that $HALT_{TM}$ is decidable.
+We show that $A_{TM}$ is reducible to $HALT_{TM}$ by constructing a machine
+based on $HALT_{TM}$ that will decide $A_{TM}$.
+
+Let $Q$ be a TM that decides $HALT_{TM}$. The we can construct a decider
+$S$ that decides $A_{TM}$ as follows,
+\begin{quote}
+$S$ = "On input $\encode{M,w}$, where $M$ is a TM and $w$ a string:
+\begin{enumerate}
+\item[1.] Run $Q$ on $\encode{M,w}$.
+\item[2.] If $Q$ rejects, \reject.
+\item[3.] If $Q$ accepts, simulate $M$ on $w$ until it halts.
+\item[4.] If $M$ has accepted, \accept; if $M$ has rejected, \reject."
+\end{enumerate}
+\end{quote}
+We have shown that $A_{TM}$ is undecidable, therefore this is a contradiction
+and our assumption that $HALT_{TM}$ is decidable must be incorrect. $\Box$
+
+}
+\es
+
+\bs{Properties of $L(M)$}
+\fframe{{\bf Theorem:}
+The language
+\[
+E_{TM} = \{ \encode{M} | \mbox{$M$ is a TM and $L(M) = \emptyset$}\}
+\]
+is undecidable.}
+
+{\bf Proof:} By contradiction.  Assume $E_{TM}$ is decidable and $Q$ is the decider.
+We show that $A_{TM}$ reduces to $E_{TM}$ by constructing the following
+decider $S$ for $A_{TM}$,
+\begin{quote}
+$S$ = "On input $\encode{M,w}$, where $M$ is a TM and $w$ a string:
+\begin{enumerate}
+\item[1.] Build the machine $M_1$ as follows,\\
+$M_1$ = "On input $x$:
+\begin{enumerate}
+\item[1.] If $x \ne w$, \reject.
+\item[2.] If $x = w$, run $M$ on input $w$ and \accept $\;$ if $M$ does."
+\end{enumerate}
+\item[2.] Run $Q$ in $\encode{M_1}$.
+\item[3.] If $Q$ accepts, \reject; if $Q$ rejects, \accept."
+\end{enumerate}
+\end{quote}
+
+But this machine cannot exist, therefore our assumption must be wrong.
+\es
+
+
+
+\bs{Properties of $L(M)$}
+\fframe{{\bf Theorem:}
+The language
+\[
+EQ_{TM} = \{ \encode{M_1,M_2} | \mbox{$M_1$ and $M_2$ are TMs and $L(M_1) = L(M_2)$}\}
+\]
+is undecidable.}
+
+{\bf Proof:} By contradiction.  Assume $EQ_{TM}$ is decidable and $Q$ is the decider.
+We show that $E_{TM}$ reduces to $EQ_{TM}$ by constructed the following
+decider $S$ for $E_{TM}$,
+\begin{quote}
+$S$ = "On input $\encode{M}$, where $M$ is a TM:
+\begin{enumerate}
+\item[1.] Run $Q$ on input $\encode{M,M'}$ where  $M'$ is a TM that rejects
+all inputs.
+\item[2.] If $Q$ accepts, \accept; if $Q$ rejects, \reject."
+\end{enumerate}
+\end{quote}
+But this machine cannot exist since $E_{TM}$ is undecidable, therefore our assumption must be wrong.
+
+\es
+
+
+\bs{Rice's Theorem}
+{\small
+In general,
+
+\fframe{{\bf Theorem:} Testing any property of languages recognized by Turing machines is undecidable.}
+
+{\bf Proof:} By contradiction. Let $P$ be a non-trivial property, then we want to show that
+\[
+L_P = \{ \encode{M} | \mbox{$L(M)$ satisfies $P$}\},
+\]
+is undecidable. \footnote{By non-trivial we mean that $L_P \ne \emptyset$ nor does it contain all TM's.}
+Assume that $L_P$ is decidable and $M_P$ is a decider.
+We now show that we can construct a decider $S$ for $A_{TM}$.
+
+\begin{quote}
+$S$ = "On input $\encode{M,w}$, where $M$ is a TM and $w$ a string:
+\begin{enumerate}
+\item Use $M$ and $w$ to construct the following TM $M'$:\\
+$M'$ = "On input $x$:
+\begin{enumerate}
+\item Simulate $M$ on $w$.  If it halts and rejects, \reject. If it accepts, proceed
+to stage (b).
+\item \label{next} Simulate some $T$ on $x$, where $\encode{T}\in L_P$.  If it accepts, \accept." \footnote{Because $L_P$
+is not trivial some $\encode{T} \in L_P$ has to exist.}
+\end{enumerate}
+\item Use $M_P$ to determine whether $\encode{M'} \in L_P$.
+If YES, \accept. If NO, \reject."
+\end{enumerate}
+\end{quote}
+
+It is easy to see that $\encode{M'}\in L_P$ iff $M$ accepts $w$, because $\encode{T}\in L_P$.
+Since $A_{TM}$ is not decidable, this machine cannot exist and our
+assumption that $L_P$ is decidable must be incorrect. $\Box$
+
+
+}
+\es
+
+
+\bs{Mapping Reducibility}
+Mapping Reducibility $\Rightarrow$ an computational approach to problem reduction.
+
+\fframe{{\bf Definition:} A function $f\co \Sigma^* \rightarrow \Sigma^*$ is a 
+{\bf\em computable function} if some Turing machine $M$, on every input $w$,
+halts with just $f(w)$ on its tape.}
+
+This allows us to formally define mapping reducibility,
+
+\fframe{{\bf Definition:} Language $A$ is {\bf\em mapping reducible} to language
+$B$, written $A \le_m B$, if there is a computable function $f\co \Sigma^* \rightarrow \Sigma^*$, where for every $w$,
+\[
+w \in A \Leftrightarrow f(w) \in B.
+\]
+The function $f$ is call the {\bf\em reduction} from $A$ to $B$.}
+
+{\bf Observation:} The function $f$ does not have to be a correspondence (neither one-to-one nor 
+surjective).  But, it is not allowed to map elements $w\not\in A$ into $B$.
+\es
+
+\bs{Mapping Reducibility}
+\fframe{{\bf Theorem:} If $A \le_m B$ and $B$ is decidable, then $A$ is decidable.}
+
+{\bf Proof:} Let $M$ be a decider for $B$ and let $f$ be a reduction from $A$ to $B$,
+then we can construct a decider $N$ for $A$ as follows:
+
+\begin{quote}
+$N$ = "On input $w$:
+\begin{enumerate}
+\item[1.] Compute $f(w)$.
+\item[2.] Run $M$ on $f(w)$ and output whatever $M$ outputs."
+\end{enumerate}
+\end{quote}
+
+Clearly, $w \in A$ if $f(w) \in B$ since $f$ is a reduction.$\Box$
+\es
+
+
+\bs{Mapping Reducibility}
+\fframe{{\bf Corollary:} If $A \le_m B$ and $A$ is undecidable, then $B$ is undecidable.}
+
+{\bf Proof:} Assume that $B$ is decidable, let $M$ be a decider for $B$ and let $f$ be a reduction from $A$ to $B$,
+then we can construct a decider $N$ for $A$ as follows:
+
+\begin{quote}
+$N$ = "On input $w$:
+\begin{enumerate}
+\item[1.] Compute $f(w)$.
+\item[2.] Run $M$ on $f(w)$ and output whatever $M$ outputs."
+\end{enumerate}
+\end{quote}
+
+But, since $A$ is undecidable by assumption this machine cannot exist and therefore
+our assumption that $B$ is decidable must be wrong.$\Box$
+\es
+
+
+\bs{The Halting Problem II}
+Let $HALT_{TM} = \{ \encode{M,w} | \mbox{$M$ is a TM and halts on $w$}\}.$  
+We construct a reduction from $A_{TM}$ to $HALT_{TM}$ such that
+\[
+\encode{M,w} \in A_{TM} \Leftrightarrow \encode{M',w} \in HALT_{TM}.
+\]
+The following machine $F$ computes the reduction:
+\begin{quote}
+$F$ = "On input $\encode{M,w}$:
+\begin{enumerate}
+\item[1.]  Construct the following machine $M'$:\\
+$M'$ = "on input $x$:
+\begin{enumerate}
+\item[1.] Run $M$ on $x$.
+\item[2.] If $M$ accepts, \accept.
+\item[3.] if $M$ rejects, loop."
+\end{enumerate}
+\item[2.] Output $\encode{M',w}$."
+\end{enumerate}
+\end{quote}
+Observe that $\encode{M',w} \in HALT_{TM}$ if and only if $\encode{M,w} \in A_{TM}$ as required.
+If the input to $F$ is not an element of $A$ we assume that $F$ maps it into some
+string not in $B$.
+\es
+
+\bs{Reductions}
+\vspace{.5in}
+
+{\bf Observation:} Reductions between languages do not always exist.  That is, it is not
+always possible to specify a computable function that reduces one language to another.
+\es
+
+
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% end of template1.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
