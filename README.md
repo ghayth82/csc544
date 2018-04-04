@@ -20,7 +20,7 @@ slides and resources for CSC544 @ URI (Theory of Computation)
 <a href="lecture-notes/15-time-complexity.pdf">Time Complexity II, P-NP</a><br>
 <a href="lecture-notes/16-time-complexity.pdf">Time Complexity III, NP-completeness</a> <br>
 <a href="lecture-notes/17-time-complexity.pdf">Time Complexity IV, NP-completeness & Cook-Levin</a><br>
-<a href="lecture-notes/18-space-complexity.pdf">Space Complexity</a> a nice version of <a href="savitch.pdf">Savitch's Proof</a><br>
+<a href="lecture-notes/18-space-complexity.pdf">Space Complexity</a> a nice version of <a href="lecture-notes/savitch.pdf">Savitch's Proof</a><br>
 
 <!--
 <a href="lecture-notes/19-space-complexity.pdf">Space Complexity Part 2</a><br>
